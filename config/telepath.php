@@ -62,7 +62,7 @@ return [
 
         'middleware' => [
             Telepath\Laravel\Http\Middleware\ResolveWebhook::class,
-//            Telepath\Laravel\Http\Middleware\ValidateRequestSource::class,
+            Telepath\Laravel\Http\Middleware\ValidateRequestSource::class,
             Telepath\Laravel\Http\Middleware\ValidateSecretToken::class,
         ],
 

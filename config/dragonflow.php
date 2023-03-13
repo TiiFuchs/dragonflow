@@ -2,8 +2,11 @@
 
 return [
 
-    'allowed_users' => [
-        '397304',
+    'allowed_chats' => [
+
+        397304, // @TiiFuchs
+        -1332711507, // Teamleitung Dragonfighters
+        
     ],
 
     'pegelonline' => [

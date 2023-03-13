@@ -5,12 +5,12 @@ namespace App\Telepath\Middleware;
 use Telepath\Middleware\Middleware;
 use Telepath\Telegram\Update;
 
-class OnlyAllowedUsers extends Middleware
+class OnlyAllowedChats extends Middleware
 {
 
     public function handle(Update $update, callable $next, array $config = [])
     {
-        if (! in_array($update->message->from->id, config('weather.allowed_users'))) {
+        if (! in_array($update->message?->chat->id, config('dragonflow.allowed_chats'))) {
             return null;
         }
 

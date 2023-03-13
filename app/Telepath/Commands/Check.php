@@ -8,7 +8,7 @@ use App\Services\BrightSky\Requests\GetWeather;
 use App\Services\PegelOnline\Connectors\PegelOnline;
 use App\Services\PegelOnline\Data\Station;
 use App\Services\PegelOnline\Requests\GetMeasurements;
-use App\Telepath\Middleware\OnlyAllowedUsers;
+use App\Telepath\Middleware\OnlyAllowedChats;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -25,12 +25,12 @@ class Check
     ) {}
 
     #[Command('check')]
-    #[Middleware(OnlyAllowedUsers::class)]
+    #[Middleware(OnlyAllowedChats::class)]
     public function __invoke(Update $update)
     {
         $pegelOnlineData = $this->getPegelOnlineData();
-        $weatherData = $this->getBrightSkyData();
 
+        $weatherData = $this->getBrightSkyData();
         $minimumTemperature = $weatherData->pluck('temperature')->min();
         $maximumWindSpeed = $weatherData->pluck('windSpeed')->max();
 
@@ -58,7 +58,7 @@ class Check
 
     protected function getPegelOnlineData(): Station
     {
-        $station = config('weather.pegelonline.station');
+        $station = config('dragonflow.pegelonline.station');
 
         $connector = new PegelOnline();
         $response = $connector->send(new GetMeasurements($station));
@@ -77,8 +77,8 @@ class Check
 
         $connector = new BrightSky();
         $response = $connector->send(new GetWeather(
-            lat: config('weather.dwd.latitude'),
-            lon: config('weather.dwd.longitude'),
+            lat: config('dragonflow.dwd.latitude'),
+            lon: config('dragonflow.dwd.longitude'),
             from: $from,
             to: $to,
         ));

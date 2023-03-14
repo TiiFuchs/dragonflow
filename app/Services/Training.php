@@ -24,7 +24,7 @@ class Training
 
     public static function temperatureDescription(): string
     {
-        return 'Temperatur >= 3 ºC';
+        return 'Temperatur ≥ 3 ºC';
     }
 
     /**
@@ -44,7 +44,7 @@ class Training
 
     public static function windSpeedDescription(): string
     {
-        return 'Windgeschwindigkeit <= 30 km/h';
+        return 'Windgeschwindigkeit ≤ 30 km/h';
     }
 
     /**
@@ -64,7 +64,7 @@ class Training
 
     public static function waterLevelDescription(): string
     {
-        return 'Wasserstand <= 230 cm';
+        return 'Wasserstand ≤ 230 cm';
     }
 
     /**
@@ -84,7 +84,7 @@ class Training
 
     public static function waterFlowrateDescription(): string
     {
-        return 'Wasserabfluss <= 350 m³/s';
+        return 'Wasserabfluss ≤ 350 m³/s';
     }
 
     /**
@@ -104,7 +104,7 @@ class Training
 
     public static function participantsDescription(): string
     {
-        return 'Anzahl Teilnehmer:innen >= 9';
+        return 'Anzahl Teilnehmer:innen ≥ 9';
     }
 
     public function clearance(): bool

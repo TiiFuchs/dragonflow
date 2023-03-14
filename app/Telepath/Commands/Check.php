@@ -56,7 +56,7 @@ class Check
 
         $this->bot->sendMessage(
             $update->message->chat->id,
-            view('messages.status', [
+            view('messages.check', [
                 // Training data
                 'trainingBegin'      => $training['starttime'],
                 'trainingEnd'        => $training['endtime'],

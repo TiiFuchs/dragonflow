@@ -13,7 +13,7 @@
 ℹ️ Lufttemperatur: <b>{{ $airTemperature->value }} {{ $airTemperature->unit }}</b>
 
 @if ($clearance)
-👍🏻 <b>Das Training kann stattfinden.</b>
+👍🏻 <b>Training kann stattfinden.</b>
 @else
-👎🏻 <b>Das Training kann NICHT stattfinden.</b>
+👎🏻 <b>Training wird NICHT empfohlen.</b>
 @endif

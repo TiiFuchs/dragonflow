@@ -10,6 +10,7 @@ use App\Services\PegelOnline\Data\Station;
 use App\Services\PegelOnline\Requests\GetMeasurements;
 use App\Services\SportMember\Connectors\SportMember;
 use App\Services\SportMember\Requests\GetActivities;
+use App\Services\Training;
 use App\Telepath\Middleware\OnlyAllowedChats;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -33,10 +34,19 @@ class Check
     #[Middleware(OnlyAllowedChats::class)]
     public function __invoke(Update $update)
     {
+        $check = new Training;
+
+        // Training data
         $training = $this->getTrainingData();
 
+        // Pegel Online data
         $pegelOnlineData = $this->getPegelOnlineData();
+        $waterTemperature = $pegelOnlineData->measurements['WT'];
+        $airTemperature = $pegelOnlineData->measurements['LT'];
+        $waterLevel = $pegelOnlineData->measurements['W'];
+        $waterFlowrate = $pegelOnlineData->measurements['Q'];
 
+        // DWD data
         $weatherData = $this->getBrightSkyData(
             $training['starttime'],
             $training['endtime'],
@@ -54,18 +64,33 @@ class Check
 
                 // PegelOnline data
                 'stationName'        => Str::headline($pegelOnlineData->name),
-                'waterTemperature'   => $pegelOnlineData->measurements['WT'],
-                'airTemperature'     => $pegelOnlineData->measurements['LT'],
-                'waterLevel'         => $pegelOnlineData->measurements['W'],
-                'waterFlow'          => $pegelOnlineData->measurements['Q'],
+                'waterTemperature'   => $waterTemperature,
+                'airTemperature'     => $airTemperature,
+                'waterLevel'         => $waterLevel,
+                'waterFlowrate'      => $waterFlowrate,
 
                 // DWD data
                 'minimumTemperature' => $minimumTemperature,
                 'maximumWindSpeed'   => $maximumWindSpeed,
+
+                // Check results
+                'participantsCheck'  => $this->displayCheckResult($check->participants($training['participants'])),
+                'temperatureCheck'   => $this->displayCheckResult($check->temperature($minimumTemperature)),
+                'windSpeedCheck'     => $this->displayCheckResult($check->windSpeed($maximumWindSpeed)),
+                'waterLevelCheck'    => $this->displayCheckResult($check->waterLevel($waterLevel->value)),
+                'waterFlowCheck'     => $this->displayCheckResult($check->waterFlowrate($waterFlowrate->value)),
+
+                // Overall check result
+                'clearance'          => $check->clearance(),
             ]),
             parse_mode: 'HTML',
         );
 
+    }
+
+    protected function displayCheckResult(bool $value): string
+    {
+        return $value ? '✅' : '❌';
     }
 
     /**

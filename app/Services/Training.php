@@ -45,8 +45,8 @@ class Training
      */
     public function waterLevel(float $waterLevel): bool
     {
-        $mwm = 177;
-        $check = abs($mwm - $waterLevel) <= 1.5;
+        $meanValue = 177;
+        $check = abs($meanValue - $waterLevel) <= 1.5;
 
         $this->clearance = $this->clearance && $check;
 

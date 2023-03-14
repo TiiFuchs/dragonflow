@@ -9,7 +9,7 @@ return [
 
     ],
 
-    'member_group' => 397304,
+    'member_group' => -1001538426066, // FKV Dragonfighters
 
     'pegelonline' => [
 

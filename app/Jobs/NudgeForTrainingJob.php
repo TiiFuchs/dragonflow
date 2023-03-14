@@ -17,11 +17,8 @@ class NudgeForTrainingJob implements ShouldQueue
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct() {}
-
     public function handle(): void
     {
-
         // Fetch how many members are registered
         /** @var Activity $nextTraining */
         $nextTraining = Activity::trainings()->first();

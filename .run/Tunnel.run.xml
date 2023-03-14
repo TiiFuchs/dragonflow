@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tunnel" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/vendor/bin/expose" scriptParameters="share dragonflow.test">
+    <method v="2" />
+  </configuration>
+</component>

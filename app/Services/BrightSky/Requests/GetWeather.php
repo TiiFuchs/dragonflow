@@ -3,7 +3,7 @@
 namespace App\Services\BrightSky\Requests;
 
 use App\Services\BrightSky\Data\Forecast;
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Saloon\Contracts\Response;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -16,8 +16,8 @@ class GetWeather extends Request
     public function __construct(
         protected string $lat,
         protected string $lon,
-        protected Carbon $from,
-        protected Carbon $to,
+        protected CarbonInterface $from,
+        protected CarbonInterface $to,
     ) {}
 
     public function resolveEndpoint(): string

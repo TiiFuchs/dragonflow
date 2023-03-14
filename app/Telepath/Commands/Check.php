@@ -8,9 +8,14 @@ use App\Services\BrightSky\Requests\GetWeather;
 use App\Services\PegelOnline\Connectors\PegelOnline;
 use App\Services\PegelOnline\Data\Station;
 use App\Services\PegelOnline\Requests\GetMeasurements;
+use App\Services\SportMember\Connectors\SportMember;
+use App\Services\SportMember\Requests\GetActivities;
 use App\Telepath\Middleware\OnlyAllowedChats;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Telepath\Bot;
 use Telepath\Handlers\Message\Command;
@@ -28,17 +33,24 @@ class Check
     #[Middleware(OnlyAllowedChats::class)]
     public function __invoke(Update $update)
     {
+        $training = $this->getTrainingData();
+
         $pegelOnlineData = $this->getPegelOnlineData();
 
-        $weatherData = $this->getBrightSkyData();
+        $weatherData = $this->getBrightSkyData(
+            $training['starttime'],
+            $training['endtime'],
+        );
         $minimumTemperature = $weatherData->pluck('temperature')->min();
         $maximumWindSpeed = $weatherData->pluck('windSpeed')->max();
 
         $this->bot->sendMessage(
             $update->message->chat->id,
             view('messages.status', [
-                'trainingBegin'      => new Carbon('monday 19:00'),
-                'trainingEnd'        => new Carbon('monday 21:00'),
+                // Training data
+                'trainingBegin'      => $training['starttime'],
+                'trainingEnd'        => $training['endtime'],
+                'participants'       => $training['participants'],
 
                 // PegelOnline data
                 'stationName'        => Str::headline($pegelOnlineData->name),
@@ -56,34 +68,84 @@ class Check
 
     }
 
+    /**
+     * @return array{ starttime: CarbonImmutable, endtime: CarbonImmutable, participants: int }
+     */
+    protected function getTrainingData(): array
+    {
+        $activities = Cache::remember(
+            'dragonflow.training',
+            now()->addHours(6),
+            function () {
+                $sportmember = new SportMember(
+                    config('dragonflow.sportmember.username'),
+                    config('dragonflow.sportmember.password'),
+                );
+
+                $response = $sportmember->send(new GetActivities(
+                    config('dragonflow.sportmember.team')
+                ));
+
+                return $response->json();
+            }
+        );
+
+        $training = collect($activities)
+            ->filter(fn($activity) => $activity['name'] === 'Training')
+            ->first();
+
+        return [
+            'starttime'    => CarbonImmutable::parse($training['starttime']),
+            'endtime'      => CarbonImmutable::parse($training['endtime']),
+            'participants' => collect($training['activities_users'])
+                ->filter(fn($action) => $action['status_code'] === 1)
+                ->count(),
+        ];
+    }
+
     protected function getPegelOnlineData(): Station
     {
-        $station = config('dragonflow.pegelonline.station');
+        $data = Cache::remember(
+            'dragonflow.pegelonline',
+            now()->addMinutes(15),
+            function () {
+                $station = config('dragonflow.pegelonline.station');
 
-        $connector = new PegelOnline();
-        $response = $connector->send(new GetMeasurements($station));
+                $connector = new PegelOnline();
+                $response = $connector->send(new GetMeasurements($station));
 
-        return $response->dto();
+                return $response->dto();
+            }
+        );
+
+        return $data;
     }
 
     /**
      * @return Collection|Forecast[]
      */
-    protected function getBrightSkyData(): Collection
+    protected function getBrightSkyData(CarbonInterface $from, CarbonInterface $to): Collection
     {
+        $from = $from->addSecond()->ceilHour();
 
-        $from = new Carbon('monday 20:00'); // 19-20 Uhr
-        $to = new Carbon('monday 21:00');   // 20-21 Uhr
+        $data = Cache::remember(
+            "dragonflow.brightsky.{$from->timestamp}.{$to->timestamp}",
+            now()->addMinutes(30),
+            function () use ($from, $to) {
+                $connector = new BrightSky();
+                $response = $connector->send(new GetWeather(
+                        lat: config('dragonflow.dwd.latitude'),
+                        lon: config('dragonflow.dwd.longitude'),
+                        from: $from,
+                        to: $to,
+                    )
+                );
 
-        $connector = new BrightSky();
-        $response = $connector->send(new GetWeather(
-            lat: config('dragonflow.dwd.latitude'),
-            lon: config('dragonflow.dwd.longitude'),
-            from: $from,
-            to: $to,
-        ));
+                return collect($response->dto());
+            }
+        );
 
-        return collect($response->dto());
+        return $data;
     }
 
 }

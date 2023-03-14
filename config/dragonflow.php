@@ -22,4 +22,14 @@ return [
 
     ],
 
+    'sportmember' => [
+
+        'username' => env('SPORTMEMBER_USERNAME'),
+
+        'password' => env('SPORTMEMBER_PASSWORD'),
+
+        'team' => 240710 // FKV Dragonfighter
+
+    ],
+
 ];

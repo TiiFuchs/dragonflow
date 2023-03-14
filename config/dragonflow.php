@@ -9,6 +9,8 @@ return [
 
     ],
 
+    'member_group' => 397304,
+
     'pegelonline' => [
 
         'station' => '66ff3eb4-513b-478b-abd2-2f5126ea66fd', // Frankfurt Osthafen
@@ -28,7 +30,7 @@ return [
 
         'password' => env('SPORTMEMBER_PASSWORD'),
 
-        'team' => 240710 // FKV Dragonfighter
+        'team' => 240710, // FKV Dragonfighter
 
     ],
 

@@ -2,6 +2,9 @@
 
 namespace App\Services\SportMember\Requests;
 
+use App\Services\SportMember\Data\Activity;
+use Illuminate\Support\Collection;
+use Saloon\Contracts\Response;
 use Saloon\Enums\Method;
 
 class GetActivities extends \Saloon\Http\Request
@@ -20,5 +23,21 @@ class GetActivities extends \Saloon\Http\Request
     {
         return "teams/{$this->teamId}/activities";
     }
+
+    /**
+     * @param  Response  $response
+     * @return Collection|Activity[]
+     */
+    public function createDtoFromResponse(Response $response): Collection
+    {
+        $result = [];
+
+        foreach ($response->json() as $activityData) {
+            $result[] = new Activity($activityData);
+        }
+
+        return collect($result);
+    }
+
 
 }

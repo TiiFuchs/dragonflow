@@ -1,6 +1,6 @@
 <b>Training am {{ $trainingBegin->format('d.m.Y H:i') }} Uhr - {{ $trainingEnd->format('H:i') }} Uhr</b>
 
-Angemeldete Teilnehmer: <b>{{ $participants }}</b>
+Angemeldete Teilnehmer:innen: <b>{{ $participants }}</b>
 
 <b>Wettervorhersage (DWD)</b>:
 Niedrigste Temperatur: <b>{{ $minimumTemperature }} °C</b>

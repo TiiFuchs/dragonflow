@@ -6,7 +6,7 @@ Strömung: <b>{{ $waterFlow->value }} {{ $waterFlow->unit }}</b>
 
 <i>Quelle: PegelOnline am {{ $waterLevel->timestamp->format('d.m.Y H:i') }} Uhr @ {{ $stationName }}</i>
 
-<b>Vorhersage für Training</b>:
+<b>Vorhersage für nächstes Training</b>:
 Niedrigste Temperatur: <b>{{ $minimumTemperature }} °C</b>
 Höchste Windgeschwindigkeit: <b>{{ $maximumWindSpeed }} km/h</b>
 

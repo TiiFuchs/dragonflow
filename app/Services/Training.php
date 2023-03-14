@@ -5,8 +5,6 @@ namespace App\Services;
 class Training
 {
 
-    const WATER_LEVEL_MEAN = 177;
-
     protected bool $clearance = true;
 
     /**
@@ -24,6 +22,11 @@ class Training
         return $check;
     }
 
+    public static function temperatureDescription(): string
+    {
+        return 'Temperatur >= 3 ºC';
+    }
+
     /**
      * Wind speed needs to be at most 30 km/h
      *
@@ -39,19 +42,29 @@ class Training
         return $check;
     }
 
+    public static function windSpeedDescription(): string
+    {
+        return 'Windgeschwindigkeit <= 30 km/h';
+    }
+
     /**
-     * Water level must not deviate by more than 150 cm from the mean value.
+     * Water level needs to be at most 230 cm
      *
      * @param  float  $waterLevel
      * @return bool
      */
     public function waterLevel(float $waterLevel): bool
     {
-        $check = abs(static::WATER_LEVEL_MEAN - $waterLevel) <= 150;
+        $check = $waterLevel <= 230;
 
         $this->clearance = $this->clearance && $check;
 
         return $check;
+    }
+
+    public static function waterLevelDescription(): string
+    {
+        return 'Wasserstand <= 230 cm';
     }
 
     /**
@@ -69,6 +82,11 @@ class Training
         return $check;
     }
 
+    public static function waterFlowrateDescription(): string
+    {
+        return 'Wasserabfluss <= 350 m³/s';
+    }
+
     /**
      * Number of participants needs to be at least 8 plus steersman
      *
@@ -82,6 +100,11 @@ class Training
         $this->clearance = $this->clearance && $check;
 
         return $check;
+    }
+
+    public static function participantsDescription(): string
+    {
+        return 'Anzahl Teilnehmer:innen >= 9';
     }
 
     public function clearance(): bool

@@ -8,7 +8,7 @@
 
 <b>Aktuelle Pegeldaten (PegelOnline, {{ $waterLevel->timestamp->format('d.m.Y H:i') }} Uhr):</b>
 {{ $waterLevelCheck }} Wasserstand: <b>{{ $waterLevel->value }} {{ $waterLevel->unit }}</b>
-{{ $waterFlowrateCheck }} Strömung: <b>{{ $waterFlowrate->value }} {{ $waterFlowrate->unit }}</b>
+{{ $waterFlowrateCheck }} Wasserabfluss: <b>{{ $waterFlowrate->value }} {{ $waterFlowrate->unit }}</b>
 ℹ️ Wassertemperatur: <b>{{ $waterTemperature->value }} {{ $waterTemperature->unit }}</b>
 ℹ️ Lufttemperatur: <b>{{ $airTemperature->value }} {{ $airTemperature->unit }}</b>
 

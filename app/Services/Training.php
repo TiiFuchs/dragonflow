@@ -5,6 +5,8 @@ namespace App\Services;
 class Training
 {
 
+    const WATER_LEVEL_MEAN = 177;
+
     protected bool $clearance = true;
 
     /**
@@ -38,15 +40,14 @@ class Training
     }
 
     /**
-     * Water level must not deviate by more than 1.5 m from the mean value.
+     * Water level must not deviate by more than 150 cm from the mean value.
      *
      * @param  float  $waterLevel
      * @return bool
      */
     public function waterLevel(float $waterLevel): bool
     {
-        $meanValue = 177;
-        $check = abs($meanValue - $waterLevel) <= 1.5;
+        $check = abs(static::WATER_LEVEL_MEAN - $waterLevel) <= 150;
 
         $this->clearance = $this->clearance && $check;
 

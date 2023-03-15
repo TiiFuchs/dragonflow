@@ -51,7 +51,7 @@ class NudgeForTrainingJob implements ShouldQueue
         $result = resolve(Client::class)->completions()->create([
             'model'       => 'text-davinci-003',
             'prompt'      => view('prompts.register_for_training')->render(),
-            'max_tokens'  => 150,
+            'max_tokens'  => 250,
             'temperature' => 0.7,
         ]);
 

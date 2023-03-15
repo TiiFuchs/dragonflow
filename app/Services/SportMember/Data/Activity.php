@@ -16,7 +16,7 @@ class Activity
 
     public int $id;
 
-    public bool $club;
+    public string $club;
 
     public bool $department;
 

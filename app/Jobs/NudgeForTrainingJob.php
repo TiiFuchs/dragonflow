@@ -36,7 +36,7 @@ class NudgeForTrainingJob implements ShouldQueue
         if ((new Training)->participants($registrations)) {
             // There are already enough registrations
             Log::debug('There are already enough participants.');
-            // return;
+            return;
         }
 
         // Nudge in group

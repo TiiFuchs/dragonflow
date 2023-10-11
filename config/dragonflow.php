@@ -9,7 +9,9 @@ return [
 
     ],
 
-    'member_group' => -1001538426066, // FKV Dragonfighters
+    'member_group' => env('TELEGRAM_NOTIFICATION_TO'),
+
+    'mail_to' => env('MAIL_NOTIFICATION_TO'),
 
     'pegelonline' => [
 

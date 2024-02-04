@@ -75,7 +75,7 @@ class Training
      */
     public function waterFlowrate(float $waterFlow)
     {
-        $check = $waterFlow <= 350;
+        $check = $waterFlow <= 400;
 
         $this->clearance = $this->clearance && $check;
 
@@ -84,7 +84,7 @@ class Training
 
     public static function waterFlowrateDescription(): string
     {
-        return 'Wasserabfluss ≤ 350 m³/s';
+        return 'Wasserabfluss ≤ 400 m³/s';
     }
 
     /**

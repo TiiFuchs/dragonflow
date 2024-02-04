@@ -4,7 +4,7 @@ namespace App\Services\BrightSky\Requests;
 
 use App\Services\BrightSky\Data\Forecast;
 use Carbon\CarbonInterface;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 

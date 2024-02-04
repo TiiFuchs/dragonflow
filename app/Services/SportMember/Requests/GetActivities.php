@@ -4,7 +4,7 @@ namespace App\Services\SportMember\Requests;
 
 use App\Services\SportMember\Data\Activity;
 use Illuminate\Support\Collection;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Enums\Method;
 
 class GetActivities extends \Saloon\Http\Request

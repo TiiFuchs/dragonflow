@@ -3,7 +3,7 @@
 namespace App\Services\PegelOnline\Requests;
 
 use App\Services\PegelOnline\Data\Station;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
